@@ -1,0 +1,234 @@
+services:
+  # LLM Providers
+  - id: anthropic
+    label: Anthropic Claude
+    category: LLM Providers
+    context: personal
+    required: true
+    hint: "console.anthropic.com → API Keys"
+    fields:
+      - id: api_key
+        label: API Key
+        env_var: ANTHROPIC_API_KEY
+        required: true
+    legacy_keys:
+      - {service: claude_api_key, account: claude_api_key}
+      # Add your own legacy Keychain entries here if migrating from another tool:
+      # - {service: com.example.app, account: claude-api-key}
+
+  - id: openai
+    label: OpenAI
+    category: LLM Providers
+    context: personal
+    hint: "platform.openai.com/api-keys"
+    fields:
+      - id: api_key
+        label: API Key
+        env_var: OPENAI_API_KEY
+    legacy_keys:
+      - {service: openai-api-key, account: openai-api-key}
+
+  - id: deepseek
+    label: DeepSeek
+    category: LLM Providers
+    context: personal
+    hint: "platform.deepseek.com"
+    fields:
+      - id: api_key
+        label: API Key
+        env_var: DEEPSEEK_API_KEY
+
+  - id: openrouter
+    label: OpenRouter
+    category: LLM Providers
+    context: personal
+    hint: "openrouter.ai/keys"
+    fields:
+      - id: api_key
+        label: API Key
+        env_var: OPENROUTER_API_KEY
+
+  - id: cerebras
+    label: Cerebras
+    category: LLM Providers
+    context: personal
+    hint: "cloud.cerebras.ai"
+    fields:
+      - id: api_key
+        label: API Key
+        env_var: CEREBRAS_API_KEY
+    legacy_keys:
+      - {service: cerebras-api-key, account: cerebras-api-key}
+
+  - id: mistral
+    label: Mistral
+    category: LLM Providers
+    context: personal
+    hint: "console.mistral.ai/api-keys"
+    fields:
+      - id: api_key
+        label: API Key
+        env_var: MISTRAL_API_KEY
+    legacy_keys:
+      - {service: mistral-api-key, account: mistral-api-key}
+
+  # Infrastructure
+  - id: litellm
+    label: LiteLLM Proxy
+    category: Infrastructure
+    context: personal
+    required: true
+    hint: "Local — generate with: openssl rand -hex 16, prefix with sk-"
+    fields:
+      - id: master_key
+        label: Master Key
+        env_var: LITELLM_MASTER_KEY
+
+  - id: postgres
+    label: PostgreSQL (LiteLLM)
+    category: Infrastructure
+    context: personal
+    fields:
+      - id: password
+        label: Password
+        env_var: POSTGRES_PASSWORD
+
+  - id: grafana
+    label: Grafana
+    category: Infrastructure
+    context: personal
+    fields:
+      - id: admin_password
+        label: Admin Password
+        env_var: GRAFANA_PASSWORD
+
+  - id: n8n
+    label: N8N
+    category: Infrastructure
+    context: personal
+    hint: "generate encryption key: openssl rand -base64 32"
+    fields:
+      - id: encryption_key
+        label: Encryption Key
+        env_var: N8N_ENCRYPTION_KEY
+      - id: basic_auth_password
+        label: Basic Auth Password
+        env_var: N8N_BASIC_AUTH_PASSWORD
+
+  # Google / GCloud
+  - id: google-api
+    label: Google API Key
+    category: Google / GCloud
+    context: personal
+    required: true
+    hint: "console.cloud.google.com → APIs & Services → Credentials"
+    fields:
+      - id: api_key
+        label: API Key
+        env_var: GOOGLE_API_KEY
+
+  - id: google-oauth
+    label: Google OAuth
+    category: Google / GCloud
+    context: both
+    multi_instance: true
+    hint: "console.cloud.google.com → APIs & Services → Credentials → OAuth 2.0"
+    fields:
+      - id: client_id
+        label: Client ID
+        env_var: GOOGLE_CLIENT_ID
+      - id: client_secret
+        label: Client Secret
+        env_var: GOOGLE_CLIENT_SECRET
+
+  # Productivity
+  - id: coda
+    label: Coda
+    category: Productivity
+    context: personal
+    required: true
+    hint: "coda.io/account → API Settings"
+    fields:
+      - id: api_token
+        label: API Token
+        env_var: CODA_API_TOKEN
+
+  - id: slack
+    label: Slack
+    category: Productivity
+    context: both
+    multi_instance: true
+    hint: "api.slack.com/apps → Your App → OAuth & Permissions"
+    fields:
+      - id: bot_token
+        label: Bot Token
+        env_var: SLACK_BOT_TOKEN
+      - id: app_token
+        label: App Token
+        env_var: SLACK_APP_TOKEN
+      - id: signing_secret
+        label: Signing Secret
+        env_var: SLACK_SIGNING_SECRET
+
+  - id: aquarium
+    label: Aquarium
+    category: Productivity
+    context: work
+    required: true
+    hint: "your-team.aquarium.app → Account Settings"
+    fields:
+      - id: api_token
+        label: API Token
+        env_var: AQUARIUM_API_TOKEN
+
+  - id: notion
+    label: Notion
+    category: Productivity
+    context: personal
+    hint: "notion.so/my-integrations"
+    fields:
+      - id: api_key
+        label: API Key
+        env_var: NOTION_API_KEY
+
+  # Dev Tools
+  - id: github
+    label: GitHub
+    category: Dev Tools
+    context: personal
+    required: true
+    hint: "github.com/settings/tokens"
+    fields:
+      - id: token
+        label: Personal Access Token
+        env_var: GITHUB_TOKEN
+
+  # Notifications
+  - id: twilio
+    label: Twilio
+    category: Notifications
+    context: personal
+    hint: "console.twilio.com → Account → API keys"
+    fields:
+      - id: account_sid
+        label: Account SID
+        env_var: TWILIO_ACCOUNT_SID
+        secret: false
+      - id: auth_token
+        label: Auth Token
+        env_var: TWILIO_AUTH_TOKEN
+      - id: from_number
+        label: From Number
+        env_var: TWILIO_FROM_NUMBER
+        secret: false
+
+  - id: ntfy
+    label: Ntfy
+    category: Notifications
+    context: personal
+    hint: "Your ntfy.sh topic name"
+    fields:
+      - id: topic
+        label: Topic
+        env_var: NTFY_TOPIC
+        secret: false

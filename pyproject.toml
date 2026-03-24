@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "creds"
+version = "1.0.0"
+description = "Personal credential manager for macOS — Keychain-backed, TUI + CLI"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.1,<9",
+    "textual>=0.47,<1",
+    "pyyaml>=6.0,<7",
+    "pyperclip>=1.8",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-mock>=3.10"]
+
+[project.scripts]
+creds = "creds.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["creds*"]

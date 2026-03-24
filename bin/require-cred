@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# require-cred — source this file, then call require_cred()
+#
+# Usage:
+#   source require-cred
+#   require_cred anthropic ANTHROPIC_API_KEY required
+#   require_cred notion NOTION_API_KEY optional
+#
+# If key is missing and required: launches `creds add SERVICE_ID`, then re-reads.
+# If key is missing and optional: warns and returns 0.
+
+require_cred() {
+    local service_id="$1"
+    local env_var="$2"
+    local required="${3:-optional}"
+
+    # Already in environment
+    if [ -n "${!env_var}" ]; then
+        return 0
+    fi
+
+    # Try to get from creds
+    local value
+    value=$(creds get "$service_id" 2>/dev/null)
+    if [ $? -eq 0 ] && [ -n "$value" ]; then
+        export "$env_var=$value"
+        return 0
+    fi
+
+    # Not found
+    if [ "$required" = "required" ]; then
+        echo "" >&2
+        echo "⚠  Required credential missing: $service_id ($env_var)" >&2
+        echo "   Opening creds to add it now..." >&2
+        echo "" >&2
+        creds add "$service_id"
+
+        # Retry after add
+        value=$(creds get "$service_id" 2>/dev/null)
+        if [ $? -eq 0 ] && [ -n "$value" ]; then
+            export "$env_var=$value"
+            echo "✓  $env_var loaded." >&2
+            return 0
+        else
+            echo "❌ $env_var still missing. Cannot continue." >&2
+            return 1
+        fi
+    else
+        echo "ℹ  Optional credential not set: $service_id ($env_var)" >&2
+        return 0
+    fi
+}
